@@ -31,7 +31,6 @@ def draw_hash():
     sense.set_pixels(grid)
     
 def highlight_cell(id):
-    global game_grid
     g = [0,255,0]
     b = [0,0,0]
     w = [255,255,255]
@@ -47,9 +46,64 @@ def highlight_cell(id):
         0,0,0,0,0,0,0,0
         ]
     
+    #These are the indexes of the LEDs in grid that need to be white for the hash
+    hash = [2,5,10,13,16,17,18,19,20,21,22,23,26,29,34,37,40,41,42,43,44,45,46,47,50,53,58,61]
+    
+    if id == 0:
+        grid[0] = g
+        grid[1] = g
+        grid[8] = g
+        grid[9] = g
+    if id == 1:
+        grid[3] = g
+        grid[4] = g
+        grid[11] = g
+        grid[12] = g
+    if id == 2:
+        grid[6] = g
+        grid[7] = g
+        grid[14] = g
+        grid[15] = g
+    if id == 3:
+        grid[24] = g
+        grid[25] = g
+        grid[32] = g
+        grid[33] = g
+    if id == 4:
+        grid[27] = g
+        grid[28] = g
+        grid[35] = g
+        grid[36] = g
+    if id == 5:
+        grid[30] = g
+        grid[31] = g
+        grid[38] = g
+        grid[39] = g
+    if id == 6:
+        grid[48] = g
+        grid[49] = g
+        grid[56] = g
+        grid[57] = g
+    if id == 7:
+        grid[51] = g
+        grid[52] = g
+        grid[59] = g
+        grid[60] = g
+    if id == 8:
+        grid[54] = g
+        grid[55] = g
+        grid[62] = g
+        grid[63] = g
+    
+    for index in range (0,64):
+        if index in hash:
+            grid[index] = w
+        if grid[index] == 0:
+            grid[index] = b
+    
+    #print(grid)
+    
     sense.set_pixels(grid)
-    
-    
 
 def initialise_game_grid():
     global game_grid
@@ -85,7 +139,6 @@ def select_cells():
             
             # print current_id
             print(current_id)
-            game_grid[0]=99
             highlight_cell(current_id)
      
 
@@ -94,103 +147,4 @@ draw_hash()
 select_cells()
 
 
-#if id == 0:
-#        grid = [
-#    g,g,w,b,b,w,b,b,    
-#    g,g,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b
-#    ]
-#    elif id == 1:
-#        grid = [
-#    b,b,w,g,g,w,b,b,    
-#    b,b,w,g,g,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b
-#    ]
-#    elif id == 2:
-#        grid = [
-#    b,b,w,b,b,w,g,g,    
-#    b,b,w,b,b,w,g,g,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b
-#    ]
-#    elif id == 3:
-#        grid = [
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    g,g,w,b,b,w,b,b,    
-#    g,g,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b
-#    ]
-#    elif id == 4:
-#        grid = [
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,g,g,w,b,b,    
-#    b,b,w,g,g,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b
-#    ]
-#    elif id == 5:
-#        grid = [
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,g,g,    
-#    b,b,w,b,b,w,g,g,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b
-#    ]
-#    elif id == 6:
-#        grid = [
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    g,g,w,b,b,w,b,b,    
-#    g,g,w,b,b,w,b,b
-#    ]
-#    elif id == 7:
-#        grid = [
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,g,g,w,b,b,    
-#    b,b,w,g,g,w,b,b
-#    ]
-#    elif id == 8:
-#        grid = [
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,b,b,    
-#    b,b,w,b,b,w,b,b,
-#    w,w,w,w,w,w,w,w,
-#    b,b,w,b,b,w,g,g,    
-#    b,b,w,b,b,w,g,g
-#    ]
 
