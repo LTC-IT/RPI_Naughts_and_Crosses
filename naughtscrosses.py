@@ -35,6 +35,8 @@ def highlight_cell(id):
     g = [0,255,0]
     b = [0,0,0]
     w = [255,255,255]
+    r = [255,0,0]        # Player 1's colour
+    bl = [0,0,255]       # Player 2's colour
     
     grid = [
         0,0,0,0,0,0,0,0,
@@ -55,9 +57,16 @@ def highlight_cell(id):
     for index in range (0,9):
         starting_pixel = starting_pixels[index]
         if game_grid[index] == 1:
-            # something
-        if game_grid[index] == 2:
-            # another thing
+            colour = bl
+        elif game_grid[index] == 2:
+            colour = r
+        else:
+            colour = 0
+        grid[starting_pixel] = colour
+        grid[starting_pixel+1] = colour
+        grid[starting_pixel+8] = colour
+        grid[starting_pixel+9] = colour 
+        
     
     starting_pixel = starting_pixels[id]
     
