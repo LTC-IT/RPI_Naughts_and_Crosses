@@ -1,6 +1,7 @@
 from sense_emu import SenseHat
 
 sense = SenseHat()
+player_one = True
 
 '''
 TODO
@@ -49,7 +50,85 @@ def highlight_cell(id):
     #These are the indexes of the LEDs in grid that need to be white for the hash
     hash = [2,5,10,13,16,17,18,19,20,21,22,23,26,29,34,37,40,41,42,43,44,45,46,47,50,53,58,61]
     
-    if id == 0:
+    starting_pixels = [0,3,6,24,27,30,48,51,54]
+    
+    for index in range (0,9):
+        starting_pixel = starting_pixels[index]
+        if game_grid[index] == 1:
+            # something
+        if game_grid[index] == 2:
+            # another thing
+    
+    starting_pixel = starting_pixels[id]
+    
+    grid[starting_pixel] = g
+    grid[starting_pixel+1] = g
+    grid[starting_pixel+8] = g
+    grid[starting_pixel+9] = g
+    
+    
+    for index in range (0,64):
+        if index in hash:
+            grid[index] = w
+        if grid[index] == 0:
+            grid[index] = b
+    
+    #print(grid)
+    
+    sense.set_pixels(grid)
+
+def initialise_game_grid():
+    global game_grid
+    # 0 = not selected
+    # 1 = O selected
+    # 2 = X selected
+    
+    game_grid = [0,0,0,0,0,0,0,0,0]
+    
+def select_cells():
+    global player_one
+    '''
+    ids of the cells
+    0,1,2,
+    3,4,5,
+    6,7,8
+    '''
+    
+    current_id = -1
+    
+    while True:
+        event = sense.stick.wait_for_event()
+        if event.action == "pressed":
+            #print("The joystick was {} {}".format(event.action, event.direction))
+            # first move
+            if event.direction == "right":
+                current_id = current_id + 1
+                if current_id == 9:
+                    current_id = 0
+            if event.direction == "middle":
+                # store the id of the cell selected
+                
+                if player_one:
+                    game_grid[current_id] = 1
+                    player_one = False
+                else:
+                    game_grid[current_id] = 2
+                    player_one = True
+                
+                print(game_grid)
+            
+            # print current_id
+            print(current_id)
+            highlight_cell(current_id)
+     
+
+initialise_game_grid()
+draw_hash()
+select_cells()
+
+
+'''
+if id == 0:
         grid[0] = g
         grid[1] = g
         grid[8] = g
@@ -94,57 +173,6 @@ def highlight_cell(id):
         grid[55] = g
         grid[62] = g
         grid[63] = g
-    
-    for index in range (0,64):
-        if index in hash:
-            grid[index] = w
-        if grid[index] == 0:
-            grid[index] = b
-    
-    #print(grid)
-    
-    sense.set_pixels(grid)
-
-def initialise_game_grid():
-    global game_grid
-    # 0 = not selected
-    # 1 = O selected
-    # 2 = X selected
-    
-    game_grid = [0,0,0,0,0,0,0,0,0]
-    
-def select_cells():
-    '''
-    ids of the cells
-    0,1,2,
-    3,4,5,
-    6,7,8
-    '''
-    
-    current_id = -1
-    
-    while True:
-        event = sense.stick.wait_for_event()
-        if event.action == "pressed":
-            #print("The joystick was {} {}".format(event.action, event.direction))
-            # first move
-            if event.direction == "right":
-                current_id = current_id + 1
-                if current_id == 9:
-                    current_id = 0
-            if event.direction == "middle":
-                # store the id of the cell selected
-                game_grid[current_id] = 99
-                print(game_grid)
-            
-            # print current_id
-            print(current_id)
-            highlight_cell(current_id)
-     
-
-initialise_game_grid()
-draw_hash()
-select_cells()
-
+'''
 
 
