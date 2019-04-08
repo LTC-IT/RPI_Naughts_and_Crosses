@@ -1,4 +1,5 @@
 from sense_emu import SenseHat
+from time import sleep
 
 sense = SenseHat()
 player_one = True  # Flag to keep track of whose turn it is.
@@ -11,9 +12,10 @@ Problems to solve - no particular order
 3 - //Indicate which is X and which is O
 4 - //swap between players
 4a - //disallow selecting cells already selected.
-5 - Detect "win"
-6 - Detect "loss" when drawn.
-7 - reset the game
+5 - //Detect "win"
+6 - //Detect "loss" when drawn.
+7 - Reset the game
+8 - Move in multiple directions
 '''
 
 def draw_hash():
@@ -154,6 +156,14 @@ def isDraw():
             return False
     return True
 
+
+def flash_feedback(colour):
+    for counter in range (0,30):
+        sense.clear(colour)
+        sleep(0.1)
+        sense.clear()
+        sleep(0.1)
+
 def select_cells():
     """The user uses the joystick on the sense hat api to scroll through the cells before chosing one
     As the user presses right, it calls the highlight_cell function to change the cell to green.
@@ -174,15 +184,22 @@ def select_cells():
     current_id = -1
     
     while True:
+        
         event = sense.stick.wait_for_event()
         if event.action == "pressed":
             #print("The joystick was {} {}".format(event.action, event.direction))
             # first move
             if event.direction == "right":
                 current_id = current_id + 1
+                
+                
                 if current_id == 9:
-                    current_id = 0
+                    current_id = 0 
+            
             if event.direction == "middle":
+                # this fixes the bug when the user presses the joystick when the game first starts
+                if current_id == -1:
+                    current_id = 0
                 # store the id of the cell selected
                 
                 if player_one:
@@ -190,24 +207,30 @@ def select_cells():
                         game_grid[current_id] = 1
                         player_one = False
                         if isWinner(1):
+                            highlight_cell(current_id)
+                            flash_feedback([0,0,255])
                             break
                 else:
                     if game_grid[current_id] == 0:
                         game_grid[current_id] = 2
                         player_one = True
                         if isWinner(2):
+                            highlight_cell(current_id)
+                            flash_feedback([255,0,0])
                             break
                 
                 print(game_grid)
             if isDraw():
                 print("Draw")
+                highlight_cell(current_id)
+                flash_feedback([0,255,0])
                 break
             
             # print current_id
             print(current_id)
             highlight_cell(current_id)
      
-
-initialise_game_grid()
-draw_hash()
-select_cells()
+while (True):
+    initialise_game_grid()
+    draw_hash()
+    select_cells()
