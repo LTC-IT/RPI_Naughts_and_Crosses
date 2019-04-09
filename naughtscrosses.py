@@ -14,8 +14,8 @@ Problems to solve - no particular order
 4a - //disallow selecting cells already selected.
 5 - //Detect "win"
 6 - //Detect "loss" when drawn.
-7 - Reset the game
-8 - Move in multiple directions
+7 - //Reset the game
+8 - //Move in multiple directions
 '''
 
 def draw_hash():
@@ -128,7 +128,8 @@ def highlight_cell(id):
     sense.set_pixels(grid)
 
 def initialise_game_grid():
-    """Creates the game grid list to represent the cells that players have selected or not.
+    """Creates the game grid list to represent the cells
+       that players have selected or not.
     Parameters:
     None
     Returns:
@@ -142,6 +143,13 @@ def initialise_game_grid():
     game_grid = [0,0,0,0,0,0,0,0,0]
     
 def isWinner(id):
+    """Checks all possible combination of win scenarios for a particular playerid
+    Parameters:
+        id (int): Players Id to check for a row/col/line of 3.
+    Returns:
+        True if there is a line of 3.
+        False if there is no line of 3.
+   """
     global game_grid
     if game_grid[0] == id and game_grid[1] == id and game_grid[2] == id or game_grid[3] == id and game_grid[4] == id and game_grid[5] == id or game_grid[6] == id and game_grid[7] == id and game_grid[8] == id or game_grid[0] == id and game_grid[3] == id and game_grid[6] == id or game_grid[1] == id and game_grid[4] == id and game_grid[7] == id or game_grid[2] == id and game_grid[5] == id and game_grid[8] == id or game_grid[0] == id and game_grid[4] == id and game_grid[8] == id or game_grid[2] == id and game_grid[4] == id and game_grid[6] == id:
         # Someone won
@@ -150,8 +158,17 @@ def isWinner(id):
     return False
 
 def isDraw():
+    """
+    Detects if there is a no-win scenario
+    Parameters:
+        None
+    Returns:
+        True if there is a draw (all spaces/cells have been filled with no win)
+        False if there is no draw - still a possibility of a win scenario
+   """
     global game_grid
     for index in range(0,9):
+        #scans the game_grid. If any cell is 0, then there are still plays left.
         if game_grid[index] == 0:
             return False
     return True
@@ -190,11 +207,30 @@ def select_cells():
             #print("The joystick was {} {}".format(event.action, event.direction))
             # first move
             if event.direction == "right":
-                current_id = current_id + 1
+                #ignores right command on the right column
+                if not(current_id == 2 or current_id == 5 or current_id == 8):
+                    current_id = current_id + 1
                 
-                
+                # Loops the selection from the end back to beginning
                 if current_id == 9:
-                    current_id = 0 
+                    current_id = 0
+            if event.direction == "left":
+                
+                # Ignores a left command on the left column
+                if not(current_id == 0 or current_id == 3 or current_id == 6):
+                    current_id = current_id - 1
+            
+            if event.direction == "up":
+              
+                # ignores up command on the top row
+                if not(current_id == 0 or current_id == 1 or current_id == 2):
+                    current_id = current_id - 3
+                
+            if event.direction == "down":
+                # ignores down command on the bottom row
+                if not(current_id == 6 or current_id == 7 or current_id == 8):
+                    current_id = current_id + 3
+                
             
             if event.direction == "middle":
                 # this fixes the bug when the user presses the joystick when the game first starts
@@ -203,6 +239,8 @@ def select_cells():
                 # store the id of the cell selected
                 
                 if player_one:
+                    # if the player clicks middle, and it's player one, then change that cell to blue.
+                    # if it's player 2, then change the cell to red.
                     if game_grid[current_id] == 0:
                         game_grid[current_id] = 1
                         player_one = False
